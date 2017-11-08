@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egor92.BusyIndicatorViewModel", "Egor92.BusyIndicatorViewModel\Egor92.BusyIndicatorViewModel.csproj", "{FCD0A2DE-0053-463E-B7A4-A1CC24FC30B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egor92.BusyIndicatorViewModel.Tests", "Egor92.BusyIndicatorViewModel.Tests\Egor92.BusyIndicatorViewModel.Tests.csproj", "{595DF20E-9938-4EA9-80AC-FF496118B231}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FCD0A2DE-0053-463E-B7A4-A1CC24FC30B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD0A2DE-0053-463E-B7A4-A1CC24FC30B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD0A2DE-0053-463E-B7A4-A1CC24FC30B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD0A2DE-0053-463E-B7A4-A1CC24FC30B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{595DF20E-9938-4EA9-80AC-FF496118B231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{595DF20E-9938-4EA9-80AC-FF496118B231}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{595DF20E-9938-4EA9-80AC-FF496118B231}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{595DF20E-9938-4EA9-80AC-FF496118B231}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
