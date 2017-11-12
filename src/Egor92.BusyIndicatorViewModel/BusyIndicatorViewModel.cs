@@ -9,11 +9,11 @@ using Egor92.Annotations;
 
 namespace Egor92
 {
-    public sealed class BusyIndicatorController : INotifyPropertyChanged, IDisposable
+    public sealed class BusyIndicatorViewModel : INotifyPropertyChanged, IDisposable
     {
         #region Fields
 
-        private readonly TimeSpan _delayTime;
+        private readonly TimeSpan? _delayTime;
         private readonly IScheduler _scheduler;
         private readonly ISubject<bool> _stateChangedSubject = new Subject<bool>();
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
@@ -22,7 +22,12 @@ namespace Egor92
 
         #region Ctor
 
-        public BusyIndicatorController(TimeSpan delayTime, IScheduler scheduler)
+        public BusyIndicatorViewModel()
+            : this(null, ThreadPoolScheduler.Instance)
+        {
+        }
+
+        public BusyIndicatorViewModel(TimeSpan? delayTime, IScheduler scheduler)
         {
             _delayTime = delayTime;
             _scheduler = scheduler;
@@ -46,9 +51,39 @@ namespace Egor92
 
         private IDisposable SubscribeToIsBusyUpdate()
         {
-            return _stateChangedSubject.Throttle(_delayTime, _scheduler)
-                                       .Subscribe(isBusy => IsBusy = isBusy);
+            var stateChangedObservable = GetStateChangedObservable();
+            return stateChangedObservable.Subscribe(isBusy => IsBusy = isBusy);
         }
+
+        private IObservable<bool> GetStateChangedObservable()
+        {
+            var stateChangedObservable = _stateChangedSubject.AsObservable();
+            if (_delayTime != null)
+            {
+                stateChangedObservable = _scheduler != null
+                    ? stateChangedObservable.Throttle(_delayTime.Value, _scheduler)
+                    : stateChangedObservable.Throttle(_delayTime.Value);
+            }
+            return stateChangedObservable;
+        }
+
+        #endregion
+
+        #region Content
+
+        public string Content { get; set; }
+
+        #endregion
+
+        #region Progress
+
+        public double Progress { get; set; }
+
+        #endregion
+
+        #region IsIntermediate
+
+        public bool IsIntermediate { get; set; }
 
         #endregion
 
@@ -75,9 +110,9 @@ namespace Egor92
 
         #endregion
 
-        public void SetBusy()
+        public void SetBusyState(bool isBusy)
         {
-            _stateChangedSubject.OnNext(true);
+            _stateChangedSubject.OnNext(isBusy);
         }
     }
 }
