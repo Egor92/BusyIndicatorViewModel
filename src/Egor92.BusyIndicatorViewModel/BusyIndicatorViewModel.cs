@@ -15,7 +15,7 @@ namespace Egor92
 
         private readonly TimeSpan? _delayTime;
         private readonly IScheduler _scheduler;
-        private readonly ISubject<bool> _stateChangedSubject = new Subject<bool>();
+        private readonly ISubject<bool> _isBusyChangedSubject = new Subject<bool>();
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
 
         #endregion
@@ -47,17 +47,27 @@ namespace Egor92
 
         #region IsBusy
 
-        public bool IsBusy { get; private set; }
+        private bool _isBusy;
+
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set { _isBusyChangedSubject.OnNext(value); }
+        }
 
         private IDisposable SubscribeToIsBusyUpdate()
         {
             var stateChangedObservable = GetStateChangedObservable();
-            return stateChangedObservable.Subscribe(isBusy => IsBusy = isBusy);
+            return stateChangedObservable.Subscribe(isBusy =>
+            {
+                _isBusy = isBusy;
+                RaisePropertyChanged(nameof(IsBusy));
+            });
         }
 
         private IObservable<bool> GetStateChangedObservable()
         {
-            var stateChangedObservable = _stateChangedSubject.AsObservable();
+            var stateChangedObservable = _isBusyChangedSubject.AsObservable();
             if (_delayTime != null)
             {
                 stateChangedObservable = _scheduler != null
@@ -109,10 +119,5 @@ namespace Egor92
         }
 
         #endregion
-
-        public void SetBusyState(bool isBusy)
-        {
-            _stateChangedSubject.OnNext(isBusy);
-        }
     }
 }

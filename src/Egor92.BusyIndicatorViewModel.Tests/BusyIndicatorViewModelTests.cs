@@ -45,53 +45,70 @@ namespace Egor92.Tests
             Assert.That(_busyIndicatorVM, Is.InstanceOf<INotifyPropertyChanged>());
         }
 
-        #region SetBusyState
+        #region IsBusy
 
         [Test]
         [TestCase(true)]
         [TestCase(false)]
-        public void SetBusyState_WhenSetBusyStateAndDelayTimePassed_ThenIsBusyEqualsTrue(bool initialIsBusy)
+        public void IsBusy_WhenSetIsBusyAndDelayTimePassed_ThenIsBusyReturnsNewValue(bool initialIsBusy)
         {
             //Arrange
             TimeSpan delayTime = TimeSpan.FromMilliseconds(100);
             _busyIndicatorVM = new BusyIndicatorViewModel(delayTime, _testScheduler);
 
-            _busyIndicatorVM.SetBusyState(initialIsBusy);
+            _busyIndicatorVM.IsBusy = initialIsBusy;
             _testScheduler.AdvanceBy(delayTime);
 
             //Act
-            bool newBusyState = !initialIsBusy;
-            _busyIndicatorVM.SetBusyState(newBusyState);
+            bool newIsBusy = !initialIsBusy;
+            _busyIndicatorVM.IsBusy = newIsBusy;
             _testScheduler.AdvanceBy(delayTime);
 
             //Assert
-            Assert.That(_busyIndicatorVM.IsBusy, Is.EqualTo(newBusyState));
+            Assert.That(_busyIndicatorVM.IsBusy, Is.EqualTo(newIsBusy));
         }
 
         [Test]
         [TestCase(true)]
         [TestCase(false)]
-        public void SetBusyState_WhenSetTheSameBusyStateAndDelayTimePassed_ThenDoesNotSetBusyState(bool initialIsBusy)
+        public void IsBusy_WhenSetSameValueAndDelayTimePassed_ThenIsBusyReturnsNewValue(bool initialIsBusy)
         {
             //Arrange
             TimeSpan delayTime = TimeSpan.FromMilliseconds(100);
             _busyIndicatorVM = new BusyIndicatorViewModel(delayTime, _testScheduler);
 
-            _busyIndicatorVM.SetBusyState(initialIsBusy);
+            _busyIndicatorVM.IsBusy = initialIsBusy;
             _testScheduler.AdvanceBy(delayTime);
 
             //Act
-            bool newBusyState = initialIsBusy;
-            _busyIndicatorVM.SetBusyState(newBusyState);
+            bool newIsBusy = initialIsBusy;
+            _busyIndicatorVM.IsBusy = newIsBusy;
             _testScheduler.AdvanceBy(delayTime);
 
             //Assert
             Assert.That(_busyIndicatorVM.IsBusy, Is.EqualTo(initialIsBusy));
         }
 
-        #endregion
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void IsBusy_WhenSetOppisiteValueAndDelayTimeDoesNotPassed_ThenIsBusyReturnsOldValue(bool initialIsBusy)
+        {
+            //Arrange
+            TimeSpan delayTime = TimeSpan.FromMilliseconds(100);
+            _busyIndicatorVM = new BusyIndicatorViewModel(delayTime, _testScheduler);
 
-        #region IsBusy
+            _busyIndicatorVM.IsBusy = initialIsBusy;
+            _testScheduler.AdvanceBy(delayTime);
+
+            //Act
+            var newIsBusy = !initialIsBusy;
+            _busyIndicatorVM.IsBusy = newIsBusy;
+            _testScheduler.AdvanceBy(TimeSpan.Zero);
+
+            //Assert
+            Assert.That(_busyIndicatorVM.IsBusy, Is.EqualTo(initialIsBusy));
+        }
 
         [Test]
         public void IsBusy_DefaultValueEqualsFalse()
@@ -218,7 +235,7 @@ namespace Egor92.Tests
             _busyIndicatorVM = new BusyIndicatorViewModel();
 
             //Act
-            _busyIndicatorVM.SetBusyState(true);
+            _busyIndicatorVM.IsBusy = true;
 
             //Assert
             Assert.That(_busyIndicatorVM.IsBusy, Is.True);

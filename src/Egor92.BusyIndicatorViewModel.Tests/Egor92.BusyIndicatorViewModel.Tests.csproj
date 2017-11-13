@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusyIndicatorViewModelExtensionsTests.cs" />
     <Compile Include="BusyIndicatorViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactiveExensions.cs" />
